@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\CompanyController;
+use App\Http\Controllers\API\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,9 +21,7 @@ use Illuminate\Support\Facades\Route;
 // });
 
 //http://localhost/laravel/laravel8/public/api
-Route::get('/', function () {
-    return "Hello World Date: ". now();
-});
+Route::get('/', [CompanyController::class, 'index']);
 
 //http://localhost/laravel/laravel8/public/api/staff
 Route::get('/staff', function () {
@@ -29,6 +29,6 @@ Route::get('/staff', function () {
 });
 
 //http://localhost/laravel/laravel8/public/api/staff
-Route::get('/staff/{id}', function ($id) {
-    return "Hello Staff id: " . $id;
-});
+Route::get('/staff/{id}', [CompanyController::class, 'show']);
+
+Route::apiResource('/product', ProductController::class);
