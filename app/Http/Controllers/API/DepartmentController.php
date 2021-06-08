@@ -19,8 +19,12 @@ class DepartmentController extends Controller
         // $d = Department::find(2);
         // $d = Department::where('name','like','%บ%')->get();
         $d = Department::select('id','name')->orderBy('id', 'desc')->get();
+        $total = Department::count();
 
-        return response()->json($d, 200);
+        return response()->json([
+            'total' => $total,
+            'data' => $d
+        ]);
     }
 
     /**
@@ -31,7 +35,14 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $d = new Department();
+        $d->name = $request->name;
+        $d->save();
+
+        return response()->json([
+            'message' => 'เพิ่มข้อมูลสำเร็จ',
+            'data' => $d
+        ], 201);
     }
 
     /**
@@ -40,9 +51,20 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function show(Department $department)
+    public function show($id)
     {
-        //
+        $d = Department::find($id);
+
+        if ($d == null) {
+            return response()->json([
+               'errors' => [
+                 'status_code' => 404,
+                 'message' => 'ไม่พบข้อมูลนี้'
+               ] 
+            ], 404);//http status code
+        }
+
+        return response()->json($d, 200);
     }
 
     /**
@@ -63,8 +85,23 @@ class DepartmentController extends Controller
      * @param  \App\Models\Department  $department
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Department $department)
+    public function destroy($id)
     {
-        //
+        $d = Department::find($id);
+
+        if ($d == null) {
+            return response()->json([
+               'errors' => [
+                 'status_code' => 404,
+                 'message' => 'ไม่พบข้อมูลนี้'
+               ] 
+            ], 404);//http status code
+        }
+
+        $d->delete();
+
+        return response()->json([
+            'message' => 'ลบข้อมูลสำเร็จ',
+        ], 200);
     }
 }
