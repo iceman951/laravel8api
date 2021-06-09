@@ -13,6 +13,7 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
     public function index()
     {
         // $d = Department::all(); //select * from departments
@@ -25,6 +26,17 @@ class DepartmentController extends Controller
             'total' => $total,
             'data' => $d
         ]);
+    }
+
+    //ค้นหาแผนก
+    public function search() {
+        $query = request()->query('name');
+        $keyword = '%' .$query. '%';
+        $d = Department::where('name', 'like', $keyword)->get();
+        
+        return response()->json([
+            'data' => $d,
+        ], 200);
     }
 
     /**
@@ -120,4 +132,6 @@ class DepartmentController extends Controller
             'message' => 'ลบข้อมูลสำเร็จ',
         ], 200);
     }
+
 }
+

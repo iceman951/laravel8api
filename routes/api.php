@@ -35,3 +35,7 @@ Route::get('/staff/{id}', [CompanyController::class, 'show']);
 Route::apiResource('/product', ProductController::class);
 
 Route::apiResource('/department', DepartmentController::class);
+
+//ค้นหาชื่อแผนก
+//api/search/department?name=บ
+Route::get('search/department/', [DepartmentController::class, 'search']);
