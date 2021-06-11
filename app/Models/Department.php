@@ -22,4 +22,5 @@ class Department extends Model
     }  
 
 
+
 }

@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\DepartmentController;
 use App\Http\Controllers\API\ProductController;
+use App\Http\Controllers\OfficeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +40,5 @@ Route::apiResource('/department', DepartmentController::class);
 //ค้นหาชื่อแผนก
 //api/search/department?name=บ
 Route::get('search/department/', [DepartmentController::class, 'search']);
+
+Route::apiResource('/officer', OfficeController::class);
