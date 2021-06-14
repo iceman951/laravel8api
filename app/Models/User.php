@@ -40,4 +40,12 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    //one to one
+    public function officer()
+    {
+        // return $this->hasOne(Officer::class);
+        return $this->hasOne(Officer::class, 'user_id', 'id');
+    }
+    
 }
