@@ -13,7 +13,7 @@ class DepartmentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function index()
     {
         // $d = Department::all(); //select * from departments
@@ -33,23 +33,30 @@ class DepartmentController extends Controller
         $pageSize = $page_size == null ? 5 : $page_size;
         $d = Department::paginate($pageSize);
 
-        return response()->json($d, 200);
+        //test relation has many
+        // $d = Department::orderBy('id', 'desc')->with(['officers'])->get();
+        // $d = Department::orderBy('id', 'desc')->with(['officers'])->paginate($pageSize);
+        $d = Department::orderBy('id', 'desc')->with(['officers' => function ($query) {
+            $query->orderBy('salary', 'desc');
+        }])->paginate($pageSize);
 
+        return response()->json($d, 200);
     }
 
     //ค้นหาแผนก
-    public function search() {
+    public function search()
+    {
         $query = request()->query('name');
-        $keyword = '%' .$query. '%';
+        $keyword = '%' . $query . '%';
         $d = Department::where('name', 'like', $keyword)->get();
-        
-        if($d -> isEmpty()){
+
+        if ($d->isEmpty()) {
             return response()->json([
                 'errors' => [
-                  'status_code' => 404,
-                  'message' => 'ไม่พบข้อมูล'
-                ] 
-             ], 404);
+                    'status_code' => 404,
+                    'message' => 'ไม่พบข้อมูล'
+                ]
+            ], 404);
         }
         return response()->json([
             'data' => $d,
@@ -86,11 +93,11 @@ class DepartmentController extends Controller
 
         if ($d == null) {
             return response()->json([
-               'errors' => [
-                 'status_code' => 404,
-                 'message' => 'ไม่พบข้อมูลนี้'
-               ] 
-            ], 404);//http status code
+                'errors' => [
+                    'status_code' => 404,
+                    'message' => 'ไม่พบข้อมูลนี้'
+                ]
+            ], 404); //http status code
         }
 
         return response()->json($d, 200);
@@ -107,11 +114,11 @@ class DepartmentController extends Controller
     {
         if ($id != $request->id) {
             return response()->json([
-               'errors' => [
-                 'status_code' => 400,
-                 'message' => 'รหัสแผนกไม่ตรงกัน'
-               ] 
-            ], 404);//http status code
+                'errors' => [
+                    'status_code' => 400,
+                    'message' => 'รหัสแผนกไม่ตรงกัน'
+                ]
+            ], 404); //http status code
         }
 
         $d = Department::find($id);
@@ -136,11 +143,11 @@ class DepartmentController extends Controller
 
         if ($d == null) {
             return response()->json([
-               'errors' => [
-                 'status_code' => 404,
-                 'message' => 'ไม่พบข้อมูลนี้'
-               ] 
-            ], 404);//http status code
+                'errors' => [
+                    'status_code' => 404,
+                    'message' => 'ไม่พบข้อมูลนี้'
+                ]
+            ], 404); //http status code
         }
 
         $d->delete();
@@ -149,6 +156,4 @@ class DepartmentController extends Controller
             'message' => 'ลบข้อมูลสำเร็จ',
         ], 200);
     }
-
 }
-
